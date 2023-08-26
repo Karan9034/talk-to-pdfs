@@ -26,6 +26,18 @@ export default function Home() {
     const { getRootProps, getInputProps } = useDropzone({onDrop});
     const { completion, input, isLoading, handleInputChange, handleSubmit } = useCompletion({api: "/api/chat"});
 
+    const handleClick = async () => {
+        const response = await fetch("/api/deleteData", {
+            method: "DELETE",
+        })
+        const body = await response.json();
+        if (body.success) {
+            alert("Data deleted successfully");
+        }else{
+            alert("Data could not be deleted");
+        }
+    }
+
     return (
         <main className="flex min-h-screen flex-col items-center p-24">
             <div
@@ -50,6 +62,14 @@ export default function Home() {
                         className="py-2 border rounded-lg bg-gray-900 text-sm px-6"
                     >
                         Submit
+                    </button>
+                    <button
+                        disabled={isLoading}
+                        type="button"
+                        onClick={handleClick}
+                        className="py-2 border rounded-lg bg-gray-900 text-sm px-6"
+                    >
+                        {"Delete (upto 10 secs)"}
                     </button>
                     <p className="text-center">
                         Completion result: {completion === "" ? "Thinking..." : completion}
